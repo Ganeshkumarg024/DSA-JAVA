@@ -5,61 +5,113 @@ import java.util.Arrays;
 import java.util.List;
 
 public class NQueens {
+//    public static void main(String[] args) {
+//        int n = 4; // Define board size
+//        char[][] board = new char[n][n];
+//        for (int i = 0; i < n; i++) Arrays.fill(board[i], '.');
+//
+//        List<List<String>> res = new ArrayList<>();
+//        backtrack(res, board, 0);
+//
+//        // Print results in a readable format
+//        for (List<String> solution : res) {
+//            for (String row : solution) System.out.println(row);
+//            System.out.println();
+//        }
+//    }
+//
+//    private static void backtrack(List<List<String>> res, char[][] board, int col) {
+//        if (col == board.length) {
+//            res.add(construct(board));
+//            return;
+//        }
+//
+//        for (int row = 0; row < board.length; row++) {
+//            if (isSafe(board, row, col)) {
+//                board[row][col] = 'Q';        // Place Queen
+//                backtrack(res, board, col + 1); // Move to next column
+//                board[row][col] = '.';        // Backtrack
+//            }
+//        }
+//    }
+//
+//    private static boolean isSafe(char[][] board, int row, int col) {
+//        // 1. Check this row on the left side
+//        for (int i = 0; i < col; i++) {
+//            if (board[row][i] == 'Q') return false;
+//        }
+//
+//        // 2. Check upper diagonal on left side
+//        for (int i = row, j = col; i >= 0 && j >= 0; i--, j--) {
+//            if (board[i][j] == 'Q') return false;
+//        }
+//
+//        // 3. Check lower diagonal on left side
+//        for (int i = row, j = col; i < board.length && j >= 0; i++, j--) {
+//            if (board[i][j] == 'Q') return false;
+//        }
+//
+//        return true;
+//    }
+//
+//    // Helper to convert char[][] board into a List of Strings
+//    private static List<String> construct(char[][] board) {
+//        List<String> path = new ArrayList<>();
+//        for (int i = 0; i < board.length; i++) {
+//            path.add(new String(board[i]));
+//        }
+//        return path;
+//    }
+
     public static void main(String[] args) {
-        int n = 4; // Define board size
-        char[][] board = new char[n][n];
-        for (int i = 0; i < n; i++) Arrays.fill(board[i], '.');
-
-        List<List<String>> res = new ArrayList<>();
-        backtrack(res, board, 0);
-
-        // Print results in a readable format
-        for (List<String> solution : res) {
-            for (String row : solution) System.out.println(row);
-            System.out.println();
-        }
+        int n=4;
+        boolean [][] board=new boolean[n][n];
+        System.out.println(queens(board,0));
     }
-
-    private static void backtrack(List<List<String>> res, char[][] board, int col) {
-        if (col == board.length) {
-            res.add(construct(board));
-            return;
+    static int queens(boolean[][]board,int row){
+        if(row==board.length){
+            display(board);
+            System.out.println();
+            return 1;
         }
-
-        for (int row = 0; row < board.length; row++) {
-            if (isSafe(board, row, col)) {
-                board[row][col] = 'Q';        // Place Queen
-                backtrack(res, board, col + 1); // Move to next column
-                board[row][col] = '.';        // Backtrack
+        int count=0;
+        for(int col=0;col<board.length;col++){
+            if(isSafe(board,row,col)){
+                board[row][col]=true;
+                count+=queens(board,row+1);
+                board[row][col]=false;
             }
         }
+        return count;
     }
-
-    private static boolean isSafe(char[][] board, int row, int col) {
-        // 1. Check this row on the left side
-        for (int i = 0; i < col; i++) {
-            if (board[row][i] == 'Q') return false;
+    static boolean isSafe(boolean[][]board,int row,int col){
+        // Check vertical column
+        for (int i = 0; i < row; i++) {
+            if (board[i][col]) return false;
         }
 
-        // 2. Check upper diagonal on left side
-        for (int i = row, j = col; i >= 0 && j >= 0; i--, j--) {
-            if (board[i][j] == 'Q') return false;
+        // Check left diagonal
+        for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
+            if (board[i][j]) return false;
         }
 
-        // 3. Check lower diagonal on left side
-        for (int i = row, j = col; i < board.length && j >= 0; i++, j--) {
-            if (board[i][j] == 'Q') return false;
+        // Check right diagonal
+        for (int i = row - 1, j = col + 1; i >= 0 && j < board.length; i--, j++) {
+            if (board[i][j]) return false;
         }
 
         return true;
     }
-
-    // Helper to convert char[][] board into a List of Strings
-    private static List<String> construct(char[][] board) {
-        List<String> path = new ArrayList<>();
-        for (int i = 0; i < board.length; i++) {
-            path.add(new String(board[i]));
+    static void display(boolean [][]board){
+        for (boolean [] row:board){
+            for (boolean element:row){
+                if(element){
+                    System.out.print('Q');
+                }else{
+                    System.out.print("x");
+                }
+            }
+            System.out.println();
         }
-        return path;
     }
 }
